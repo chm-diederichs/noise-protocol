@@ -276,13 +276,15 @@ function writeMessage (state, payload, messageBuffer) {
   for (var token of mpat) {
     switch (token) {
       case TOK_E:
-        assert(state.epk == null)
-        assert(state.esk == null)
+        if (state.epk == null) {
+          assert(state.epk == null)
+          assert(state.esk == null)
 
-        state.epk = sodium_malloc(dh.PKLEN)
-        state.esk = sodium_malloc(dh.SKLEN)
+          state.epk = sodium_malloc(dh.PKLEN)
+          state.esk = sodium_malloc(dh.SKLEN)
 
-        dh.generateKeypair(state.epk, state.esk)
+          dh.generateKeypair(state.epk, state.esk)
+        }
 
         messageBuffer.set(state.epk, moffset)
         moffset += state.epk.byteLength
